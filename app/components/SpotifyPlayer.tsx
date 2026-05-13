@@ -29,33 +29,42 @@ export default function SpotifyPlayer() {
 
   const [currentSong, setCurrentSong] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
-  const [progress, setProgress] = useState(0);
+  const [currentTime, setCurrentTime] = useState(0);
+  const [duration, setDuration] = useState(0);
+
+  const song = songs[currentSong];
 
   useEffect(() => {
-    if (!audioRef.current) return;
+    const audio = audioRef.current;
 
-    audioRef.current.load();
-    audioRef.current.volume = 1;
+    if (!audio) return;
+
+    audio.load();
+    audio.volume = 1;
 
     if (currentSong === 2) {
-      audioRef.current.currentTime = 5;
+      audio.currentTime = 5;
+      setCurrentTime(5);
+    } else {
+      audio.currentTime = 0;
+      setCurrentTime(0);
     }
 
     if (isPlaying) {
-      audioRef.current.play();
+      audio.play();
     }
   }, [currentSong]);
 
   useEffect(() => {
     const interval = setInterval(() => {
-      if (!audioRef.current) return;
+      const audio = audioRef.current;
 
-      const current = audioRef.current.currentTime;
-      const duration = audioRef.current.duration || 1;
+      if (!audio) return;
 
-      setProgress((current / duration) * 100);
+      setCurrentTime(audio.currentTime);
+      setDuration(audio.duration || 0);
 
-      if (audioRef.current.ended) {
+      if (audio.ended) {
         nextSong();
       }
     }, 500);
@@ -64,13 +73,15 @@ export default function SpotifyPlayer() {
   }, []);
 
   function togglePlay() {
-    if (!audioRef.current) return;
+    const audio = audioRef.current;
+
+    if (!audio) return;
 
     if (isPlaying) {
-      audioRef.current.pause();
+      audio.pause();
       setIsPlaying(false);
     } else {
-      audioRef.current.play();
+      audio.play();
       setIsPlaying(true);
     }
   }
@@ -80,57 +91,83 @@ export default function SpotifyPlayer() {
   }
 
   function prevSong() {
-    setCurrentSong((prev) =>
-      prev === 0 ? songs.length - 1 : prev - 1
-    );
+    setCurrentSong((prev) => (prev === 0 ? songs.length - 1 : prev - 1));
   }
 
-  return (
-    <div className="bg-white/10 backdrop-blur-2xl border border-white/10 p-4 sm:p-5 rounded-[32px] w-[300px] sm:w-[380px] shadow-[0_0_40px_rgba(255,0,128,0.2)]">
-      <audio ref={audioRef} src={songs[currentSong].src} />
+  function changeTime(event: React.ChangeEvent<HTMLInputElement>) {
+    const audio = audioRef.current;
 
-      <div className="relative mb-5 overflow-hidden rounded-3xl h-[190px] sm:h-[240px]">
+    if (!audio) return;
+
+    const newTime = Number(event.target.value);
+
+    audio.currentTime = newTime;
+    setCurrentTime(newTime);
+  }
+
+  function formatTime(time: number) {
+    if (!time) return "0:00";
+
+    const minutes = Math.floor(time / 60);
+    const seconds = Math.floor(time % 60);
+
+    return `${minutes}:${seconds.toString().padStart(2, "0")}`;
+  }
+
+  const progress = duration > 0 ? (currentTime / duration) * 100 : 0;
+
+  return (
+    <div className="bg-white/10 backdrop-blur-2xl border border-white/10 p-4 rounded-[28px] w-full max-w-[340px] shadow-[0_0_35px_rgba(255,0,128,0.2)]">
+      <audio ref={audioRef} src={song.src} />
+
+      <div className="relative mb-4 overflow-hidden rounded-2xl h-[210px]">
         <Image
-          src={songs[currentSong].cover}
+          src={song.cover}
           alt="Capa da música"
           fill
           className="object-cover transition-all duration-1000"
         />
       </div>
 
-      <div className="mb-5">
-        <h2 className="text-2xl font-bold leading-tight">
-          {songs[currentSong].title}
-        </h2>
+      <div className="mb-4">
+        <h2 className="text-xl font-bold leading-tight">{song.title}</h2>
 
-        <p className="text-gray-300 mt-1">
-          {songs[currentSong].artist}
-        </p>
+        <p className="text-gray-300 mt-1">{song.artist}</p>
       </div>
 
-      <div className="mb-5">
-        <div className="w-full h-2 bg-white/20 rounded-full overflow-hidden">
-          <div
-            className="h-full bg-pink-500 rounded-full transition-all"
-            style={{ width: `${progress}%` }}
-          />
-        </div>
+      <div className="mb-2">
+        <input
+          type="range"
+          min={0}
+          max={duration || 0}
+          value={currentTime}
+          onChange={changeTime}
+          className="music-slider w-full"
+          style={{
+            background: `linear-gradient(to right, #ec4899 ${progress}%, rgba(255,255,255,0.15) ${progress}%)`,
+          }}
+        />
       </div>
 
-      <div className="flex items-center justify-center gap-6">
+      <div className="flex justify-between text-xs text-gray-400 mb-5">
+        <span>{formatTime(currentTime)}</span>
+        <span>{formatTime(duration)}</span>
+      </div>
+
+      <div className="flex items-center justify-center gap-7">
         <button onClick={prevSong} className="text-2xl">
-          ⏮
+          ◀
         </button>
 
         <button
           onClick={togglePlay}
           className="bg-pink-500 hover:bg-pink-600 transition-all rounded-full w-16 h-16 text-2xl shadow-[0_0_25px_rgba(255,0,128,0.6)]"
         >
-          {isPlaying ? "⏸" : "▶"}
+          {isPlaying ? "Ⅱ" : "▶"}
         </button>
 
         <button onClick={nextSong} className="text-2xl">
-          ⏭
+          ▶
         </button>
       </div>
     </div>
