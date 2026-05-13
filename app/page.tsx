@@ -9,6 +9,8 @@ import SpotifyPlayer from "./components/SpotifyPlayer";
 export default function Home() {
   const targetDate = new Date("2026-05-26T00:00:00");
 
+  const [started, setStarted] = useState(false);
+
   const [timeLeft, setTimeLeft] = useState({
     dias: 0,
     horas: 0,
@@ -38,63 +40,88 @@ export default function Home() {
 
       <div className="absolute left-1/2 top-24 -translate-x-1/2 w-[320px] h-[320px] lg:w-[600px] lg:h-[600px] bg-pink-500/20 blur-[140px] rounded-full" />
 
-      <div className="relative z-10 flex flex-col items-center gap-8 max-w-md mx-auto lg:max-w-6xl lg:flex-row lg:justify-center lg:gap-20">
-        <section className="flex flex-col items-center text-center gap-5">
-          <Image
-            src="/photos/photos/foto1.jpeg"
-            alt="Nós dois"
-            width={280}
-            height={280}
-            className="w-[150px] h-[150px] sm:w-[220px] sm:h-[220px] lg:w-[280px] lg:h-[280px] rounded-full object-cover border-4 border-pink-500 shadow-[0_0_35px_rgba(255,0,128,0.65)]"
-          />
+      {!started ? (
+        <div className="relative z-10 min-h-[85dvh] flex flex-col items-center justify-center text-center max-w-md mx-auto">
+          <p className="text-pink-300 text-lg mb-4">
+            Antes de continuar...
+          </p>
 
-          <div>
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold leading-tight">
-              Nosso Amor ❤️
-            </h1>
+          <h1 className="text-4xl sm:text-6xl font-bold leading-tight mb-6">
+            vamos nos conectar
+            <br />
+            pela música?
+          </h1>
 
-            <p className="text-gray-300 text-lg sm:text-xl mt-3">
-              Contagem para 26 de Maio
-            </p>
+          <p className="text-gray-300 text-lg max-w-[320px] mb-10 leading-relaxed">
+            Cada canção guarda um pedacinho do que eu sinto por você.
+          </p>
 
-            <p className="mt-3 text-pink-200/60 text-sm italic max-w-[280px]">
-              algumas coisas só fazem sentido na hora certa...
-            </p>
-          </div>
-        </section>
+          <button
+            onClick={() => setStarted(true)}
+            className="px-9 py-4 rounded-full bg-pink-500 hover:bg-pink-400 text-xl font-semibold transition-all duration-300 hover:scale-110 shadow-[0_0_40px_rgba(255,0,128,0.7)]"
+          >
+            🎵 Começar
+          </button>
+        </div>
+      ) : (
+        <div className="relative z-10 flex flex-col items-center gap-8 max-w-md mx-auto lg:max-w-6xl lg:flex-row lg:justify-center lg:gap-20">
+          <section className="flex flex-col items-center text-center gap-5">
+            <Image
+              src="/photos/foto1.jpeg"
+              alt="Nós dois"
+              width={280}
+              height={280}
+              className="w-[150px] h-[150px] sm:w-[220px] sm:h-[220px] lg:w-[280px] lg:h-[280px] rounded-full object-cover border-4 border-pink-500 shadow-[0_0_35px_rgba(255,0,128,0.65)]"
+            />
 
-        <section className="flex flex-col items-center gap-5 w-full">
-          <div className="grid grid-cols-4 gap-2 w-full max-w-[360px]">
-            <div className="bg-white/10 backdrop-blur-xl rounded-2xl py-4 text-center">
-              <p className="text-3xl font-bold">{timeLeft.dias}</p>
-              <span className="text-xs text-gray-300">Dias</span>
+            <div>
+              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold leading-tight">
+                Nosso Amor ❤️
+              </h1>
+
+              <p className="text-gray-300 text-lg sm:text-xl mt-3">
+                Contagem para 26 de Maio
+              </p>
+
+              <p className="mt-3 text-pink-200/60 text-sm italic max-w-[280px]">
+                algumas coisas só fazem sentido na hora certa...
+              </p>
+            </div>
+          </section>
+
+          <section className="flex flex-col items-center gap-5 w-full">
+            <div className="grid grid-cols-4 gap-2 w-full max-w-[360px]">
+              <div className="bg-white/10 backdrop-blur-xl rounded-2xl py-4 text-center">
+                <p className="text-3xl font-bold">{timeLeft.dias}</p>
+                <span className="text-xs text-gray-300">Dias</span>
+              </div>
+
+              <div className="bg-white/10 backdrop-blur-xl rounded-2xl py-4 text-center">
+                <p className="text-3xl font-bold">{timeLeft.horas}</p>
+                <span className="text-xs text-gray-300">Horas</span>
+              </div>
+
+              <div className="bg-white/10 backdrop-blur-xl rounded-2xl py-4 text-center">
+                <p className="text-3xl font-bold">{timeLeft.minutos}</p>
+                <span className="text-xs text-gray-300">Min</span>
+              </div>
+
+              <div className="bg-white/10 backdrop-blur-xl rounded-2xl py-4 text-center">
+                <p className="text-3xl font-bold">{timeLeft.segundos}</p>
+                <span className="text-xs text-gray-300">Seg</span>
+              </div>
             </div>
 
-            <div className="bg-white/10 backdrop-blur-xl rounded-2xl py-4 text-center">
-              <p className="text-3xl font-bold">{timeLeft.horas}</p>
-              <span className="text-xs text-gray-300">Horas</span>
+            <div className="bg-white/5 border border-white/10 rounded-2xl px-4 py-3 text-center w-full max-w-[340px]">
+              <p className="text-white/45 text-sm">
+                🔒 mensagem disponível em 26 de Maio
+              </p>
             </div>
 
-            <div className="bg-white/10 backdrop-blur-xl rounded-2xl py-4 text-center">
-              <p className="text-3xl font-bold">{timeLeft.minutos}</p>
-              <span className="text-xs text-gray-300">Min</span>
-            </div>
-
-            <div className="bg-white/10 backdrop-blur-xl rounded-2xl py-4 text-center">
-              <p className="text-3xl font-bold">{timeLeft.segundos}</p>
-              <span className="text-xs text-gray-300">Seg</span>
-            </div>
-          </div>
-
-          <div className="bg-white/5 border border-white/10 rounded-2xl px-4 py-3 text-center w-full max-w-[340px]">
-            <p className="text-white/45 text-sm">
-              🔒 mensagem disponível em 26 de Maio
-            </p>
-          </div>
-
-          <SpotifyPlayer />
-        </section>
-      </div>
+            <SpotifyPlayer />
+          </section>
+        </div>
+      )}
     </main>
   );
 }
