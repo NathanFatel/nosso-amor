@@ -41,7 +41,7 @@ export default function Home() {
       <div className="relative z-10 flex flex-col items-center gap-8 max-w-md mx-auto lg:max-w-6xl lg:flex-row lg:justify-center lg:gap-20">
         <section className="flex flex-col items-center text-center gap-5">
           <Image
-            src="/photos/foto1.jpeg"
+            src="/photos/photos/foto1.jpeg"
             alt="Nós dois"
             width={280}
             height={280}

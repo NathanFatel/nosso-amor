@@ -6,7 +6,7 @@ import { useEffect, useRef, useState } from "react";
 const songs = [
   {
     title: "Tudo começa em silêncio.",
-    artist: "26 de Maio",
+    artist: "26 de maio",
     src: "/music/music1.mp3",
     cover: "/covers/cover1.jpeg",
   },
@@ -117,7 +117,7 @@ export default function SpotifyPlayer() {
   const progress = duration > 0 ? (currentTime / duration) * 100 : 0;
 
   return (
-    <div className="bg-white/10 backdrop-blur-2xl border border-white/10 p-4 rounded-[28px] w-full max-w-[340px] shadow-[0_0_35px_rgba(255,0,128,0.2)]">
+    <div className="bg-white/10 backdrop-blur-2xl border border-white/10 p-4 rounded-[28px] w-full max-w-[340px] shadow-[0_0_35px_rgba(255,0,128,0.25)]">
       <audio ref={audioRef} src={song.src} />
 
       <div className="relative mb-4 overflow-hidden rounded-2xl h-[210px]">
@@ -127,6 +127,8 @@ export default function SpotifyPlayer() {
           fill
           className="object-cover transition-all duration-1000"
         />
+
+        <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent" />
       </div>
 
       <div className="mb-4">
@@ -155,19 +157,27 @@ export default function SpotifyPlayer() {
       </div>
 
       <div className="flex items-center justify-center gap-7">
-        <button onClick={prevSong} className="text-2xl">
-          ◀
+        <button
+          onClick={prevSong}
+          className="w-12 h-12 rounded-full bg-white/10 hover:bg-white/20 border border-white/10 text-white flex items-center justify-center transition-all hover:scale-110"
+        >
+          <span className="text-lg">‹</span>
         </button>
 
         <button
           onClick={togglePlay}
-          className="bg-pink-500 hover:bg-pink-600 transition-all rounded-full w-16 h-16 text-2xl shadow-[0_0_25px_rgba(255,0,128,0.6)]"
+          className="w-20 h-20 rounded-full bg-pink-500 hover:bg-pink-400 text-white flex items-center justify-center transition-all hover:scale-110 shadow-[0_0_35px_rgba(255,0,128,0.75)]"
         >
-          {isPlaying ? "Ⅱ" : "▶"}
+          <span className="text-3xl leading-none">
+            {isPlaying ? "Ⅱ" : "▶"}
+          </span>
         </button>
 
-        <button onClick={nextSong} className="text-2xl">
-          ▶
+        <button
+          onClick={nextSong}
+          className="w-12 h-12 rounded-full bg-white/10 hover:bg-white/20 border border-white/10 text-white flex items-center justify-center transition-all hover:scale-110"
+        >
+          <span className="text-lg">›</span>
         </button>
       </div>
     </div>
